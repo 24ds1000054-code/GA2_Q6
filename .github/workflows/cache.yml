@@ -1,0 +1,28 @@
+name: CI Cache Workflow
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Restore Cache
+        id: cache_step
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/demo
+          key: cache-501c977
+
+      - name: prime-cache-501c977
+        run: echo "cache-hit=${{ steps.cache_step.outputs.cache-hit }}"
+
+      - name: Generate cache content
+        run: |
+          mkdir -p ~/.cache/demo
+          echo "hello" > ~/.cache/demo/file.txt
